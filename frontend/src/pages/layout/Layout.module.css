@@ -108,4 +108,25 @@
   .headerIcon {
     margin-left: 26px;
   }
+
+  .disclaimerBar {
+    font-size: 12px;
+    padding: 8px;
+    text-align: center;
+    width: 100%;
+    white-space: normal;
+    word-wrap: break-word;
+  }
+}
+
+.disclaimerBar {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: normal;
+  word-wrap: break-word;
 }

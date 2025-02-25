@@ -70,19 +70,28 @@ export const Answer = ({ answer, onCitationClicked, onExectResultClicked }: Prop
     let citationFilename = ''
 
     if (citation.filepath) {
-      const part_i = citation.part_index ?? (citation.chunk_id ? parseInt(citation.chunk_id) + 1 : '')
       if (truncate && citation.filepath.length > filePathTruncationLimit) {
         const citationLength = citation.filepath.length
-        citationFilename = `${citation.filepath.substring(0, 20)}...${citation.filepath.substring(citationLength - 20)} - Part ${part_i}`
+        citationFilename = `${citation.filepath.substring(0, 20)}...${citation.filepath.substring(citationLength - 20)}`
       } else {
-        citationFilename = `${citation.filepath} - Part ${part_i}`
+        citationFilename = citation.filepath
       }
-    } else if (citation.filepath && citation.reindex_id) {
-      citationFilename = `${citation.filepath} - Part ${citation.reindex_id}`
     } else {
       citationFilename = `Citation ${index}`
     }
     return citationFilename
+  }
+
+  const mergeCitations = (citations: Citation[]) => {
+    const uniqueCitations: { [key: string]: { citation: Citation; index: number } } = {}
+    let index = 1
+    citations.forEach(citation => {
+      if (citation.filepath && !uniqueCitations[citation.filepath]) {
+        uniqueCitations[citation.filepath] = { citation, index }
+        index++
+      }
+    })
+    return Object.values(uniqueCitations)
   }
 
   const onLikeResponseClicked = async () => {
@@ -227,7 +236,7 @@ export const Answer = ({ answer, onCitationClicked, onExectResultClicked }: Prop
   }
 
   const components = {
-    code({ node, ...props }: { node: any;[key: string]: any }) {
+    code({ node, ...props }: { node: any; [key: string]: any }) {
       let language
       if (props.className) {
         const match = props.className.match(/language-(\w+)/)
@@ -247,17 +256,22 @@ export const Answer = ({ answer, onCitationClicked, onExectResultClicked }: Prop
         <Stack.Item>
           <Stack horizontal grow>
             <Stack.Item grow>
-              {parsedAnswer && <ReactMarkdown
-                linkTarget="_blank"
-                remarkPlugins={[remarkGfm, supersub]}
-                children={
-                  SANITIZE_ANSWER
-                    ? DOMPurify.sanitize(parsedAnswer?.markdownFormatText, { ALLOWED_TAGS: XSSAllowTags, ALLOWED_ATTR: XSSAllowAttributes })
-                    : parsedAnswer?.markdownFormatText
-                }
-                className={styles.answerText}
-                components={components}
-              />}
+              {parsedAnswer && (
+                <ReactMarkdown
+                  linkTarget="_blank"
+                  remarkPlugins={[remarkGfm, supersub]}
+                  children={
+                    SANITIZE_ANSWER
+                      ? DOMPurify.sanitize(parsedAnswer?.markdownFormatText, {
+                          ALLOWED_TAGS: XSSAllowTags,
+                          ALLOWED_ATTR: XSSAllowAttributes
+                        })
+                      : parsedAnswer?.markdownFormatText
+                  }
+                  className={styles.answerText}
+                  components={components}
+                />
+              )}
             </Stack.Item>
             <Stack.Item className={styles.answerHeader}>
               {FEEDBACK_ENABLED && answer.message_id !== undefined && (
@@ -268,7 +282,7 @@ export const Answer = ({ answer, onCitationClicked, onExectResultClicked }: Prop
                     onClick={() => onLikeResponseClicked()}
                     style={
                       feedbackState === Feedback.Positive ||
-                        appStateContext?.state.feedbackState[answer.message_id] === Feedback.Positive
+                      appStateContext?.state.feedbackState[answer.message_id] === Feedback.Positive
                         ? { color: 'darkgreen', cursor: 'pointer' }
                         : { color: 'slategray', cursor: 'pointer' }
                     }
@@ -279,8 +293,8 @@ export const Answer = ({ answer, onCitationClicked, onExectResultClicked }: Prop
                     onClick={() => onDislikeResponseClicked()}
                     style={
                       feedbackState !== Feedback.Positive &&
-                        feedbackState !== Feedback.Neutral &&
-                        feedbackState !== undefined
+                      feedbackState !== Feedback.Neutral &&
+                      feedbackState !== undefined
                         ? { color: 'darkred', cursor: 'pointer' }
                         : { color: 'slategray', cursor: 'pointer' }
                     }
@@ -336,15 +350,9 @@ export const Answer = ({ answer, onCitationClicked, onExectResultClicked }: Prop
                     aria-label="Open Intents"
                     tabIndex={0}
                     role="button">
-                    <span>
-                      Show Intents
-                    </span>
+                    <span>Show Intents</span>
                   </Text>
-                  <FontIcon
-                    className={styles.accordionIcon}
-                    onClick={handleChevronClick}
-                    iconName={'ChevronRight'}
-                  />
+                  <FontIcon className={styles.accordionIcon} onClick={handleChevronClick} iconName={'ChevronRight'} />
                 </Stack>
               </Stack>
             </Stack.Item>
@@ -352,19 +360,20 @@ export const Answer = ({ answer, onCitationClicked, onExectResultClicked }: Prop
         </Stack>
         {chevronIsExpanded && (
           <div className={styles.citationWrapper}>
-            {parsedAnswer?.citations.map((citation, idx) => {
+            {mergeCitations(parsedAnswer?.citations || []).map(({ citation, index }) => {
+              const trimmedTitle = citation.title ? citation.title.split('_').slice(2).join('_') : undefined
               return (
                 <span
-                  title={createCitationFilepath(citation, ++idx)}
+                  title={trimmedTitle}
                   tabIndex={0}
                   role="link"
-                  key={idx}
+                  key={index}
                   onClick={() => onCitationClicked(citation)}
                   onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ? onCitationClicked(citation) : null)}
                   className={styles.citationContainer}
-                  aria-label={createCitationFilepath(citation, idx)}>
-                  <div className={styles.citation}>{idx}</div>
-                  {createCitationFilepath(citation, idx, true)}
+                  aria-label={trimmedTitle}>
+                  <div className={styles.citation}>{index}</div>
+                  {trimmedTitle}
                 </span>
               )
             })}
