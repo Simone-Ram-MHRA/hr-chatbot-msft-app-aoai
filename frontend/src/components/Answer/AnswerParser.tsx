@@ -12,13 +12,14 @@ export const enumerateCitations = (citations: Citation[]) => {
   const filepathMap = new Map()
   for (const citation of citations) {
     const { filepath } = citation
-    let part_i = 1
-    if (filepathMap.has(filepath)) {
-      part_i = filepathMap.get(filepath) + 1
+    if (!filepathMap.has(filepath)) {
+      filepathMap.set(filepath, 1)
     }
-    filepathMap.set(filepath, part_i)
-    citation.part_index = part_i
+    citation.part_index = filepathMap.get(filepath)
   }
+  citations.filter((value, index, self) => {
+    return self.findIndex(t => t.filepath === value.filepath && t.part_index === value.part_index) === index
+  })
   return citations
 }
 
