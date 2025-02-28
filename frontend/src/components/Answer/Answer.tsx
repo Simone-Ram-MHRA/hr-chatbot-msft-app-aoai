@@ -66,34 +66,6 @@ export const Answer = ({ answer, onCitationClicked, onExectResultClicked }: Prop
     setFeedbackState(currentFeedbackState)
   }, [appStateContext?.state.feedbackState, feedbackState, answer.message_id])
 
-  const createCitationFilepath = (citation: Citation, index: number, truncate: boolean = false) => {
-    let citationFilename = ''
-
-    if (citation.filepath) {
-      if (truncate && citation.filepath.length > filePathTruncationLimit) {
-        const citationLength = citation.filepath.length
-        citationFilename = `${citation.filepath.substring(0, 20)}...${citation.filepath.substring(citationLength - 20)}`
-      } else {
-        citationFilename = citation.filepath
-      }
-    } else {
-      citationFilename = `Citation ${index}`
-    }
-    return citationFilename
-  }
-
-  const mergeCitations = (citations: Citation[]) => {
-    const uniqueCitations: { [key: string]: { citation: Citation; index: number } } = {}
-    let index = 1
-    citations.forEach(citation => {
-      if (citation.filepath && !uniqueCitations[citation.filepath]) {
-        uniqueCitations[citation.filepath] = { citation, index }
-        index++
-      }
-    })
-    return Object.values(uniqueCitations)
-  }
-
   const onLikeResponseClicked = async () => {
     if (answer.message_id == undefined) return
 
@@ -360,18 +332,27 @@ export const Answer = ({ answer, onCitationClicked, onExectResultClicked }: Prop
         </Stack>
         {chevronIsExpanded && (
           <div className={styles.citationWrapper}>
-            {mergeCitations(parsedAnswer?.citations || []).map(({ citation, index }) => {
-              const trimmedTitle = citation.title ? citation.title.split('_').slice(2).join('_') : undefined
+            {(parsedAnswer?.citations || []).map((citation, index) => {
+              let trimmedTitle = citation.title
+              if (trimmedTitle && trimmedTitle.toLowerCase().includes('_sharepoint_')) {
+                trimmedTitle =
+                  trimmedTitle
+                    ?.split(/_sharepoint_/i)
+                    .pop()
+                    ?.trim() ?? null
+                trimmedTitle = `Sharepoint ${trimmedTitle?.replace(/_/g, ' ')}`
+              }
+
               return (
                 <span
-                  title={trimmedTitle}
+                  title={trimmedTitle ?? undefined}
                   tabIndex={0}
                   role="link"
                   key={index}
                   onClick={() => onCitationClicked(citation)}
                   onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ? onCitationClicked(citation) : null)}
                   className={styles.citationContainer}
-                  aria-label={trimmedTitle}>
+                  aria-label={trimmedTitle ?? undefined}>
                   <div className={styles.citation}>{index}</div>
                   {trimmedTitle}
                 </span>
