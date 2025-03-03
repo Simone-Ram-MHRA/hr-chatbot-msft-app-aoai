@@ -353,7 +353,7 @@ export const Answer = ({ answer, onCitationClicked, onExectResultClicked }: Prop
                   onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ? onCitationClicked(citation) : null)}
                   className={styles.citationContainer}
                   aria-label={trimmedTitle ?? undefined}>
-                  <div className={styles.citation}>{index}</div>
+                  <div className={styles.citation}>{index + 1}</div>
                   {trimmedTitle}
                 </span>
               )
