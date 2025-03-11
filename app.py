@@ -36,6 +36,34 @@ from backend.utils import (
     format_pf_non_streaming_response,
 )
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
+from opencensus.ext.azure.log_exporter import AzureEventHandler
+from threading import Lock
+
+# Basic configuration for logging
+logging.basicConfig(level=logging.INFO)
+
+# Create a logger
+logger = logging.getLogger(__name__)
+
+connection_string= os.environ.get("APPLICATIONINSIGHTS_CONNECTION_STRING")
+
+# Add AzureEventHandler to the logger
+azure_event_handler = AzureEventHandler(connection_string=connection_string)
+
+# Explicitly set the lock for the handler
+azure_event_handler.lock = Lock()
+
+# Add AzureEventHandler to the logger
+logger.addHandler(azure_event_handler)
+
+logger.setLevel(logging.INFO)
+logging.getLogger('opencensus').setLevel(logging.DEBUG)
+
+
 bp = Blueprint("routes", __name__, static_folder="static", template_folder="static")
 
 cosmos_db_ready = asyncio.Event()
@@ -384,6 +412,12 @@ async def stream_chat_request(request_body, request_headers):
     return generate()
 
 
+# Define a function to truncate the data
+def truncate_data(data, max_length=512):
+    if len(data) > max_length:
+        return data[:max_length] + '...'
+    return data
+
 async def conversation_internal(request_body, request_headers):
     try:
         if app_settings.azure_openai.stream and not app_settings.base_settings.use_promptflow:
@@ -391,9 +425,15 @@ async def conversation_internal(request_body, request_headers):
             response = await make_response(format_as_ndjson(result))
             response.timeout = None
             response.mimetype = "application/json-lines"
+            # Log the conversation data
+            truncated_data = truncate_data(json.dumps(request_body))
+            logger.info(f"Conversation data: {truncated_data}")
             return response
         else:
             result = await complete_chat_request(request_body, request_headers)
+            # Log the conversation data
+            truncated_data = truncate_data(json.dumps(request_body))
+            logger.info(f"Conversation data: {truncated_data}")
             return jsonify(result)
 
     except Exception as ex:
