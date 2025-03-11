@@ -97,8 +97,8 @@ const Layout = () => {
       </header>
       <div className={styles.disclaimerBar}>
         <span className={styles.disclaimerText}>
-          DISCLAIMER: Please remember that all answers are AI-generated, so do double check the references in the HR
-          documents information, Insite, or the HR team
+          DISCLAIMER: Remember that all answers are AI-generated, so do double check the answers' references to Insite,
+          the People Team's documents on SharePoint, or with members of the People Team.
         </span>
       </div>
       <Outlet />
