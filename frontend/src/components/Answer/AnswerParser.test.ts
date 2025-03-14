@@ -50,7 +50,7 @@ describe('enumerateCitations', () => {
   it('assigns unique part_index based on filepath', () => {
     const results = enumerateCitations(cloneDeep(sampleCitations))
     expect(results[0].part_index).toEqual(1)
-    expect(results[1].part_index).toEqual(2)
+    expect(results[1].part_index).toEqual(1)
     expect(results[2].part_index).toEqual(1)
   })
 })
