@@ -4,7 +4,6 @@ name: Trigger app build on HR-Chatbot repo
 on:
   push:
     branches:
-      - feature/dispatch_workflow
       - main
 
 jobs:
