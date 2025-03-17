@@ -41,8 +41,7 @@ const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = ({ hidde
       text: (
         <>
           We would love to hear your feedback! Please email
-          <a href="mailto:engineering-development@mhra.gov.uk">engineering-development@mhra.gov.uk</a>with your
-          comments.
+          <a href="mailto:engineering-ai@mhra.gov.uk">engineering-ai@mhra.gov.uk</a>with your comments.
         </>
       ),
       iconName: 'Mail'
