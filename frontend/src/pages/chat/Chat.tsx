@@ -804,7 +804,7 @@ const Chat = () => {
           <div className={styles.chatContainer}>
             {!messages || messages.length < 1 ? (
               <Stack className={styles.chatEmptyState}>
-                <img src={logo} className={styles.chatIcon} aria-hidden="true" />
+                <img src={logo} className={styles.chatIcon} aria-hidden="true" alt="govuk-logo" />
                 <h1 className={styles.chatEmptyStateTitle}>{ui?.chat_title}</h1>
                 <h2 className={styles.chatEmptyStateSubtitle}>{ui?.chat_description}</h2>
               </Stack>
