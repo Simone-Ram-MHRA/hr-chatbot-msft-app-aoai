@@ -365,7 +365,7 @@ export const ChatHistoryListItemGroups: React.FC<ChatHistoryListItemGroupsProps>
                 {formatMonth(group.month)}
               </Stack>
               <List
-                aria-label={`chat history list`}
+                aria-label={`chat history`}
                 items={group.entries}
                 onRenderCell={onRenderCell}
                 className={styles.chatList}
