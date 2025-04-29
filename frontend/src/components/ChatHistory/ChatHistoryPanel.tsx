@@ -162,7 +162,7 @@ export function ChatHistoryPanel(_props: ChatHistoryPanelProps) {
               }}
               title={'Hide'}
               onClick={handleHistoryClick}
-              aria-label={'hide button'}
+              aria-label={'hide'}
               styles={{
                 root: {
                   color: '#000000',

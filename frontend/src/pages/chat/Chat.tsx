@@ -918,7 +918,7 @@ const Chat = () => {
                     iconProps={{ iconName: 'Add' }}
                     onClick={newChat}
                     disabled={disabledButton()}
-                    aria-label="start a new chat button"
+                    aria-label="start a new chat"
                   />
                 )}
                 <CommandBarButton
@@ -951,7 +951,7 @@ const Chat = () => {
                       : newChat
                   }
                   disabled={disabledButton()}
-                  aria-label="clear chat button"
+                  aria-label="clear chat"
                 />
                 <Dialog
                   hidden={hideErrorDialog}
