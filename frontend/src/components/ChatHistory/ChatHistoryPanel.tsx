@@ -122,11 +122,27 @@ export function ChatHistoryPanel(_props: ChatHistoryPanelProps) {
         <Stack verticalAlign="start">
           <Stack horizontal styles={commandBarButtonStyle}>
             <CommandBarButton
-              iconProps={{ iconName: 'More' }}
+              iconProps={{
+                iconName: 'More',
+                styles: {
+                  root: { color: '#000000' }
+                }
+              }}
               title={'Clear all chat history'}
               onClick={onShowContextualMenu}
               aria-label={'clear all chat history'}
-              styles={commandBarStyle}
+              styles={{
+                root: {
+                  color: '#000000',
+                  backgroundColor: 'transparent'
+                },
+                rootHovered: {
+                  color: '#000000',
+                  backgroundColor: 'transparent'
+                },
+                icon: { color: '#000000' },
+                iconHovered: { color: '#000000' }
+              }}
               role="button"
               id="moreButton"
             />
@@ -138,11 +154,27 @@ export function ChatHistoryPanel(_props: ChatHistoryPanelProps) {
               onDismiss={onHideContextualMenu}
             />
             <CommandBarButton
-              iconProps={{ iconName: 'Cancel' }}
+              iconProps={{
+                iconName: 'Cancel',
+                styles: {
+                  root: { color: '#000000' }
+                }
+              }}
               title={'Hide'}
               onClick={handleHistoryClick}
-              aria-label={'hide button'}
-              styles={commandBarStyle}
+              aria-label={'hide'}
+              styles={{
+                root: {
+                  color: '#000000',
+                  backgroundColor: 'transparent'
+                },
+                rootHovered: {
+                  color: '#000000',
+                  backgroundColor: 'transparent'
+                },
+                icon: { color: '#000000' },
+                iconHovered: { color: '#000000' }
+              }}
               role="button"
             />
           </Stack>

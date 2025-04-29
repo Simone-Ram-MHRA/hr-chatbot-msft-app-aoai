@@ -178,12 +178,11 @@ export const ChatHistoryListItemCell: React.FC<ChatHistoryListItemCellProps> = (
     <Stack
       key={item.id}
       tabIndex={0}
-      aria-label="chat history item"
+      aria-labelledby={`chat-title-${item.id}`}
       className={styles.itemCell}
       onClick={() => handleSelectItem()}
       onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ? handleSelectItem() : null)}
       verticalAlign="center"
-      // horizontal
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       styles={{
@@ -204,7 +203,6 @@ export const ChatHistoryListItemCell: React.FC<ChatHistoryListItemCellProps> = (
                     placeholder={item.title}
                     onChange={chatHistoryTitleOnChange}
                     onKeyDown={handleKeyPressEdit}
-                    // errorMessage={errorRename}
                     disabled={errorRename ? true : false}
                   />
                 </Stack.Item>
@@ -247,13 +245,16 @@ export const ChatHistoryListItemCell: React.FC<ChatHistoryListItemCellProps> = (
       ) : (
         <>
           <Stack horizontal verticalAlign={'center'} style={{ width: '100%' }}>
-            <div className={styles.chatTitle}>{truncatedTitle}</div>
+            <div id={`chat-title-${item.id}`} className={styles.chatTitle}>
+              {truncatedTitle}
+            </div>
             {(isSelected || isHovered) && (
-              <Stack horizontal horizontalAlign="end">
+              <Stack horizontal horizontalAlign="end" aria-label={`Actions for ${item.title}`}>
                 <IconButton
                   className={styles.itemButton}
                   iconProps={{ iconName: 'Delete' }}
                   title="Delete"
+                  aria-label={`Delete chat history item: ${item.title}`}
                   onClick={toggleDeleteDialog}
                   onKeyDown={e => (e.key === ' ' ? toggleDeleteDialog() : null)}
                 />
@@ -261,6 +262,7 @@ export const ChatHistoryListItemCell: React.FC<ChatHistoryListItemCellProps> = (
                   className={styles.itemButton}
                   iconProps={{ iconName: 'Edit' }}
                   title="Edit"
+                  aria-label={`Edit chat history item: ${item.title}`}
                   onClick={onEdit}
                   onKeyDown={e => (e.key === ' ' ? onEdit() : null)}
                 />
@@ -365,7 +367,7 @@ export const ChatHistoryListItemGroups: React.FC<ChatHistoryListItemGroupsProps>
                 {formatMonth(group.month)}
               </Stack>
               <List
-                aria-label={`chat history list`}
+                aria-label={`chat history`}
                 items={group.entries}
                 onRenderCell={onRenderCell}
                 className={styles.chatList}
