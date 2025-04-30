@@ -177,11 +177,7 @@ export const ChatHistoryListItemCell: React.FC<ChatHistoryListItemCellProps> = (
   return (
     <Stack
       key={item.id}
-      tabIndex={0}
-      aria-labelledby={`chat-title-${item.id}`}
       className={styles.itemCell}
-      onClick={() => handleSelectItem()}
-      onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ? handleSelectItem() : null)}
       verticalAlign="center"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -203,18 +199,19 @@ export const ChatHistoryListItemCell: React.FC<ChatHistoryListItemCellProps> = (
                     placeholder={item.title}
                     onChange={chatHistoryTitleOnChange}
                     onKeyDown={handleKeyPressEdit}
+                    // errorMessage={errorRename}
                     disabled={errorRename ? true : false}
                   />
                 </Stack.Item>
                 {editTitle && (
                   <Stack.Item>
-                    <Stack aria-label="action button group" horizontal verticalAlign={'center'}>
+                    <Stack horizontal verticalAlign={'center'}>
                       <IconButton
                         role="button"
                         disabled={errorRename !== undefined}
                         onKeyDown={e => (e.key === ' ' || e.key === 'Enter' ? handleSaveEdit(e) : null)}
                         onClick={e => handleSaveEdit(e)}
-                        aria-label="confirm new title"
+                        aria-label="Confirm new title"
                         iconProps={{ iconName: 'CheckMark' }}
                         styles={{ root: { color: 'green', marginLeft: '5px' } }}
                       />
@@ -223,7 +220,7 @@ export const ChatHistoryListItemCell: React.FC<ChatHistoryListItemCellProps> = (
                         disabled={errorRename !== undefined}
                         onKeyDown={e => (e.key === ' ' || e.key === 'Enter' ? cancelEditTitle() : null)}
                         onClick={() => cancelEditTitle()}
-                        aria-label="cancel edit title"
+                        aria-label="Cancel edit title"
                         iconProps={{ iconName: 'Cancel' }}
                         styles={{ root: { color: 'red', marginLeft: '5px' } }}
                       />
@@ -245,29 +242,34 @@ export const ChatHistoryListItemCell: React.FC<ChatHistoryListItemCellProps> = (
       ) : (
         <>
           <Stack horizontal verticalAlign={'center'} style={{ width: '100%' }}>
-            <div id={`chat-title-${item.id}`} className={styles.chatTitle}>
+            <div
+              id={`chat-title-${item.id}`}
+              className={styles.chatTitle}
+              tabIndex={0}
+              role="button"
+              aria-label={item.title}
+              onClick={() => handleSelectItem()}
+              onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ? handleSelectItem() : null)}>
               {truncatedTitle}
             </div>
-            {(isSelected || isHovered) && (
-              <Stack horizontal horizontalAlign="end" aria-label={`Actions for ${item.title}`}>
-                <IconButton
-                  className={styles.itemButton}
-                  iconProps={{ iconName: 'Delete' }}
-                  title="Delete"
-                  aria-label={`Delete chat history item: ${item.title}`}
-                  onClick={toggleDeleteDialog}
-                  onKeyDown={e => (e.key === ' ' ? toggleDeleteDialog() : null)}
-                />
-                <IconButton
-                  className={styles.itemButton}
-                  iconProps={{ iconName: 'Edit' }}
-                  title="Edit"
-                  aria-label={`Edit chat history item: ${item.title}`}
-                  onClick={onEdit}
-                  onKeyDown={e => (e.key === ' ' ? onEdit() : null)}
-                />
-              </Stack>
-            )}
+
+            <Stack horizontal horizontalAlign="end">
+              <IconButton
+                className={styles.itemButton}
+                iconProps={{ iconName: 'Delete' }}
+                title="Delete"
+                onClick={toggleDeleteDialog}
+                onKeyDown={e => (e.key === ' ' ? toggleDeleteDialog() : null)}
+              />
+
+              <IconButton
+                className={styles.itemButton}
+                iconProps={{ iconName: 'Edit' }}
+                title="Edit"
+                onClick={onEdit}
+                onKeyDown={e => (e.key === ' ' ? onEdit() : null)}
+              />
+            </Stack>
           </Stack>
         </>
       )}
