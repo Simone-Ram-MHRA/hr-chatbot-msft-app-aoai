@@ -303,7 +303,7 @@ const Chat = () => {
         appStateContext?.dispatch({ type: 'UPDATE_CURRENT_CHAT', payload: conversation })
         setMessages([...messages, errorChatMsg])
       } else {
-        setMessages([...messages, userMessage])
+        console.log('Request aborted by user.')
       }
     } finally {
       setIsLoading(false)
@@ -538,6 +538,7 @@ const Chat = () => {
         appStateContext?.dispatch({ type: 'UPDATE_CURRENT_CHAT', payload: resultConversation })
         setMessages([...messages, errorChatMsg])
       } else {
+        console.log('Request aborted by user.')
         setMessages([...messages, userMessage])
       }
     } finally {
@@ -640,6 +641,7 @@ const Chat = () => {
   }
 
   const stopGenerating = () => {
+    // Abort all ongoing requests
     abortFuncs.current.forEach(a => a.abort())
     setShowLoadingMessage(false)
     setIsLoading(false)
