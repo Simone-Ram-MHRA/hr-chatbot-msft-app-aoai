@@ -9,6 +9,9 @@ export type ParsedAnswer = {
 } | null
 
 export const enumerateCitations = (citations: Citation[]) => {
+  console.log('enumerateCitations', citations)
+  //if citations are logged in the console but not showing in the frontend, it may be due to missing file path or part index fields
+  //if no citations are logged, then the response was served from the prompt cache, and the citations were not generated
   const filepathMap = new Map()
   for (const citation of citations) {
     const { filepath } = citation
