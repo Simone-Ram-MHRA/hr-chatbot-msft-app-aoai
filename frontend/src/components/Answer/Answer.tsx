@@ -220,6 +220,26 @@ export const Answer = ({ answer, onCitationClicked, onExectResultClicked }: Prop
           {codeString}
         </SyntaxHighlighter>
       )
+    },
+    p: ({ node, children, ...props }: { node: any; children: any; [key: string]: any }) => {
+      const modifiedChildren = children.map((child: any, index: any) => {
+        if (typeof child === 'string') {
+          const parts = child.split(/display-none(.*?)display-none/)
+          return parts.map((part, i) => {
+            if (i % 2 === 1) {
+              return (
+                <span key={`${index}-${i}`} style={{ display: 'none' }}>
+                  {part}
+                </span>
+              )
+            }
+            return part
+          })
+        }
+        return child
+      })
+
+      return <p {...props}>{modifiedChildren}</p>
     }
   }
   return (
