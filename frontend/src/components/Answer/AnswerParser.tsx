@@ -76,7 +76,7 @@ export function parseAnswer(answer: AskResponse): ParsedAnswer {
   filteredCitations = enumerateCitations(filteredCitations)
 
   console.log('final answer text', answerText)
-  answerText += `\n display-none${docReference}display-none`
+  answerText += `\n display-none_${docReference}_display-none`
   return {
     citations: filteredCitations,
     markdownFormatText: answerText,
