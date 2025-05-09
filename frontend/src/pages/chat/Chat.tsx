@@ -282,29 +282,29 @@ const Chat = () => {
         setMessages([...messages, toolMessage, assistantMessage])
       }
     } catch (e) {
-      if (!abortController.signal.aborted) {
-        let errorMessage =
-          'An error occurred. Please try again. If the problem persists, please contact the site administrator.'
-        if (result.error?.message) {
-          errorMessage = result.error.message
-        } else if (typeof result.error === 'string') {
-          errorMessage = result.error
-        }
-
-        errorMessage = parseErrorMessage(errorMessage)
-
-        let errorChatMsg: ChatMessage = {
-          id: uuid(),
-          role: ERROR,
-          content: errorMessage,
-          date: new Date().toISOString()
-        }
-        conversation.messages.push(errorChatMsg)
-        appStateContext?.dispatch({ type: 'UPDATE_CURRENT_CHAT', payload: conversation })
-        setMessages([...messages, errorChatMsg])
-      } else {
+      if (abortController.signal.aborted) {
         console.log('Request aborted by user.')
+        return
       }
+      let errorMessage =
+        'An error occurred. Please try again. If the problem persists, please contact the site administrator.'
+      if (result.error?.message) {
+        errorMessage = result.error.message
+      } else if (typeof result.error === 'string') {
+        errorMessage = result.error
+      }
+
+      errorMessage = parseErrorMessage(errorMessage)
+
+      let errorChatMsg: ChatMessage = {
+        id: uuid(),
+        role: ERROR,
+        content: errorMessage,
+        date: new Date().toISOString()
+      }
+      conversation.messages.push(errorChatMsg)
+      appStateContext?.dispatch({ type: 'UPDATE_CURRENT_CHAT', payload: conversation })
+      setMessages([...messages, errorChatMsg])
     } finally {
       setIsLoading(false)
       setShowLoadingMessage(false)
@@ -479,68 +479,67 @@ const Chat = () => {
           : setMessages([...messages, toolMessage, assistantMessage])
       }
     } catch (e) {
-      if (!abortController.signal.aborted) {
-        let errorMessage = `An error occurred. ${errorResponseMessage}`
-        if (result.error?.message) {
-          errorMessage = result.error.message
-        } else if (typeof result.error === 'string') {
-          errorMessage = result.error
-        }
+      if (abortController.signal.aborted) {
+        console.log('Request aborted by user.')
+        return
+      }
+      let errorMessage = `An error occurred. ${errorResponseMessage}`
+      if (result.error?.message) {
+        errorMessage = result.error.message
+      } else if (typeof result.error === 'string') {
+        errorMessage = result.error
+      }
 
-        errorMessage = parseErrorMessage(errorMessage)
+      errorMessage = parseErrorMessage(errorMessage)
 
-        let errorChatMsg: ChatMessage = {
-          id: uuid(),
-          role: ERROR,
-          content: errorMessage,
-          date: new Date().toISOString()
-        }
-        let resultConversation
-        if (conversationId) {
-          resultConversation = appStateContext?.state?.chatHistory?.find(conv => conv.id === conversationId)
-          if (!resultConversation) {
-            console.error('Conversation not found.')
-            setIsLoading(false)
-            setShowLoadingMessage(false)
-            abortFuncs.current = abortFuncs.current.filter(a => a !== abortController)
-            return
-          }
-          resultConversation.messages.push(errorChatMsg)
-        } else {
-          if (!result.history_metadata) {
-            console.error('Error retrieving data.', result)
-            let errorChatMsg: ChatMessage = {
-              id: uuid(),
-              role: ERROR,
-              content: errorMessage,
-              date: new Date().toISOString()
-            }
-            setMessages([...messages, userMessage, errorChatMsg])
-            setIsLoading(false)
-            setShowLoadingMessage(false)
-            abortFuncs.current = abortFuncs.current.filter(a => a !== abortController)
-            return
-          }
-          resultConversation = {
-            id: result.history_metadata.conversation_id,
-            title: result.history_metadata.title,
-            messages: [userMessage],
-            date: result.history_metadata.date
-          }
-          resultConversation.messages.push(errorChatMsg)
-        }
+      let errorChatMsg: ChatMessage = {
+        id: uuid(),
+        role: ERROR,
+        content: errorMessage,
+        date: new Date().toISOString()
+      }
+      let resultConversation
+      if (conversationId) {
+        resultConversation = appStateContext?.state?.chatHistory?.find(conv => conv.id === conversationId)
         if (!resultConversation) {
+          console.error('Conversation not found.')
           setIsLoading(false)
           setShowLoadingMessage(false)
           abortFuncs.current = abortFuncs.current.filter(a => a !== abortController)
           return
         }
-        appStateContext?.dispatch({ type: 'UPDATE_CURRENT_CHAT', payload: resultConversation })
-        setMessages([...messages, errorChatMsg])
+        resultConversation.messages.push(errorChatMsg)
       } else {
-        console.log('Request aborted by user.')
-        setMessages([...messages, userMessage])
+        if (!result.history_metadata) {
+          console.error('Error retrieving data.', result)
+          let errorChatMsg: ChatMessage = {
+            id: uuid(),
+            role: ERROR,
+            content: errorMessage,
+            date: new Date().toISOString()
+          }
+          setMessages([...messages, userMessage, errorChatMsg])
+          setIsLoading(false)
+          setShowLoadingMessage(false)
+          abortFuncs.current = abortFuncs.current.filter(a => a !== abortController)
+          return
+        }
+        resultConversation = {
+          id: result.history_metadata.conversation_id,
+          title: result.history_metadata.title,
+          messages: [userMessage],
+          date: result.history_metadata.date
+        }
+        resultConversation.messages.push(errorChatMsg)
       }
+      if (!resultConversation) {
+        setIsLoading(false)
+        setShowLoadingMessage(false)
+        abortFuncs.current = abortFuncs.current.filter(a => a !== abortController)
+        return
+      }
+      appStateContext?.dispatch({ type: 'UPDATE_CURRENT_CHAT', payload: resultConversation })
+      setMessages([...messages, errorChatMsg])
     } finally {
       setIsLoading(false)
       setShowLoadingMessage(false)
