@@ -282,6 +282,7 @@ const Chat = () => {
         setMessages([...messages, toolMessage, assistantMessage])
       }
     } catch (e) {
+      console.log('Abort signal status:', abortController.signal.aborted)
       if (abortController.signal.aborted) {
         console.log('Request aborted by user.')
         return
@@ -642,11 +643,11 @@ const Chat = () => {
   const [stopTriggered, setStopTriggered] = useState(false)
 
   const stopGenerating = () => {
-    // Abort all ongoing requests
     abortFuncs.current.forEach(a => a.abort())
     setShowLoadingMessage(false)
     setIsLoading(false)
     setStopTriggered(true)
+    setMessages(prevMessages => prevMessages.filter(message => message.role !== ERROR))
   }
 
   useEffect(() => {
