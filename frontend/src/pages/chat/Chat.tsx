@@ -640,11 +640,14 @@ const Chat = () => {
     setProcessMessages(messageStatus.Done)
   }
 
+  const [stopTriggered, setStopTriggered] = useState(false)
+
   const stopGenerating = () => {
     // Abort all ongoing requests
     abortFuncs.current.forEach(a => a.abort())
     setShowLoadingMessage(false)
     setIsLoading(false)
+    setStopTriggered(true)
   }
 
   useEffect(() => {
@@ -672,7 +675,7 @@ const Chat = () => {
         if (!noContentError) {
           saveToDB(appStateContext.state.currentChat.messages, appStateContext.state.currentChat.id)
             .then(res => {
-              if (!res.ok) {
+              if (!res.ok && !stopTriggered) {
                 let errorMessage =
                   "An error occurred. Answers can't be saved at this time. If the problem persists, please contact the site administrator."
                 let errorChatMsg: ChatMessage = {
@@ -708,6 +711,7 @@ const Chat = () => {
       setMessages(appStateContext.state.currentChat.messages)
       setProcessMessages(messageStatus.NotRunning)
     }
+    setStopTriggered(false)
   }, [processMessages])
 
   useEffect(() => {
@@ -733,14 +737,19 @@ const Chat = () => {
   }
 
   const parseCitationFromMessage = (message: ChatMessage) => {
+    console.log('parsing citations from message', message)
+
     if (message?.role && message?.role === 'tool' && typeof message?.content === 'string') {
       try {
+        console.log('parsedContent', JSON.parse(message?.content) || 'cannot parse content')
         const toolMessage = JSON.parse(message.content) as ToolMessageContent
         return toolMessage.citations
-      } catch {
+      } catch (error) {
+        console.log('catch error', error)
         return []
       }
     }
+    console.log('no citations found in message.')
     return []
   }
 
