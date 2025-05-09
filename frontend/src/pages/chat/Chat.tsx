@@ -711,7 +711,9 @@ const Chat = () => {
       setMessages(appStateContext.state.currentChat.messages)
       setProcessMessages(messageStatus.NotRunning)
     }
-    setStopTriggered(false)
+    if (processMessages === messageStatus.Processing) {
+      setStopTriggered(false)
+    }
   }, [processMessages])
 
   useEffect(() => {
