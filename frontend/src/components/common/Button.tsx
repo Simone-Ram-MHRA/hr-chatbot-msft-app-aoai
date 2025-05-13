@@ -21,6 +21,7 @@ export const ShareButton: React.FC<ButtonProps> = ({ onClick, text }) => {
 export const HistoryButton: React.FC<ButtonProps> = ({ onClick, text }) => {
   return (
     <DefaultButton
+      data-testid="history-button"
       className={styles.historyButtonRoot}
       text={text}
       iconProps={{ iconName: 'History' }}

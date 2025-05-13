@@ -108,6 +108,7 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conv
       )}
       {base64Image && <img className={styles.uploadedImage} src={base64Image} alt="Uploaded Preview" />}
       <div
+        id="send-button"
         className={styles.questionInputSendButtonContainer}
         role="button"
         tabIndex={0}
@@ -115,9 +116,9 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conv
         onClick={sendQuestion}
         onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ? sendQuestion() : null)}>
         {sendQuestionDisabled ? (
-          <SendRegular className={styles.questionInputSendButtonDisabled} />
+          <SendRegular id="send-button-disabled" className={styles.questionInputSendButtonDisabled} />
         ) : (
-          <img src={Send} className={styles.questionInputSendButton} alt="Send Button" />
+          <img src={Send} id="send-button-img" className={styles.questionInputSendButton} alt="Send Button" />
         )}
       </div>
       <div className={styles.questionInputBottomBorder} />

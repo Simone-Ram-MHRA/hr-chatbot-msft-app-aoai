@@ -107,6 +107,7 @@ export function ChatHistoryPanel(_props: ChatHistoryPanelProps) {
       <Stack horizontal horizontalAlign="space-between" verticalAlign="center" wrap aria-label="chat history header">
         <StackItem>
           <Text
+            id="chat-history-header"
             role="heading"
             aria-level={2}
             style={{
@@ -123,12 +124,14 @@ export function ChatHistoryPanel(_props: ChatHistoryPanelProps) {
           <Stack horizontal styles={commandBarButtonStyle}>
             <CommandBarButton
               iconProps={{
+                id:"more-button",
                 iconName: 'More',
                 styles: {
                   root: { color: '#000000' }
                 }
               }}
               title={'Clear all chat history'}
+              data-testid={'clear-all-button'}
               onClick={onShowContextualMenu}
               aria-label={'clear all chat history'}
               styles={{
@@ -147,6 +150,7 @@ export function ChatHistoryPanel(_props: ChatHistoryPanelProps) {
               id="moreButton"
             />
             <ContextualMenu
+              id="clear-all-chat-history-button"
               items={menuItems}
               hidden={!showContextualMenu}
               target={'#moreButton'}
@@ -154,6 +158,7 @@ export function ChatHistoryPanel(_props: ChatHistoryPanelProps) {
               onDismiss={onHideContextualMenu}
             />
             <CommandBarButton
+              id="cancel-button"
               iconProps={{
                 iconName: 'Cancel',
                 styles: {
@@ -233,6 +238,7 @@ export function ChatHistoryPanel(_props: ChatHistoryPanelProps) {
                   style={{ width: '100%', marginTop: 10 }}>
                   <StackItem style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <Spinner
+                      id="loading-spinner"
                       style={{ alignSelf: 'flex-start', height: '100%', marginRight: '5px' }}
                       size={SpinnerSize.medium}
                     />
@@ -249,13 +255,15 @@ export function ChatHistoryPanel(_props: ChatHistoryPanelProps) {
         </Stack>
       </Stack>
       <Dialog
+        data-testid="clear-all-dialog"
         hidden={hideClearAllDialog}
         onDismiss={clearing ? () => {} : onHideClearAllDialog}
         dialogContentProps={clearAllDialogContentProps}
         modalProps={modalProps}>
         <DialogFooter>
-          {!clearingError && <PrimaryButton onClick={onClearAllChatHistory} disabled={clearing} text="Clear All" />}
+          {!clearingError && <PrimaryButton id="confirm-clear-all-button" onClick={onClearAllChatHistory} disabled={clearing} text="Clear All" />}
           <DefaultButton
+            id="cancel-clear-all-button"
             onClick={onHideClearAllDialog}
             disabled={clearing}
             text={!clearingError ? 'Cancel' : 'Close'}
