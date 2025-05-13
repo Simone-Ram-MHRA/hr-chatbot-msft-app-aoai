@@ -55,7 +55,7 @@ const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = ({ hidde
       modalProps={modalProps}
       dialogContentProps={dialogContentProps}
       minWidth={600}>
-      <div>
+      <div id="welcome-message">
         <Text>
           Welcome to the MHRA People Chatbot!
           <span>
@@ -68,7 +68,7 @@ const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = ({ hidde
       <div>
         <Stack tokens={{ childrenGap: 10 }}>
           {points.map((point, index) => (
-            <Stack horizontal verticalAlign="center" key={index} tokens={{ childrenGap: 10 }}>
+            <Stack horizontal verticalAlign="center" key={index} tokens={{ childrenGap: 10 }} id={`terms-point-${index}`}>
               <Icon iconName={point.iconName} styles={{ root: { fontSize: 16, color: '#0078D4' } }} />
               <Text>{point.text}</Text>
             </Stack>
@@ -77,9 +77,9 @@ const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = ({ hidde
       </div>
       <br />
       <br />
-      <Checkbox label="I agree to the terms and conditions" checked={isChecked} onChange={handleCheckboxChange} />
-      <DialogFooter>
-        <PrimaryButton onClick={onSubmit} text="Submit" disabled={!isChecked} />
+      <Checkbox id="terms-checkbox" label="I agree to the terms and conditions" checked={isChecked} onChange={handleCheckboxChange} />
+      <DialogFooter data-testid="dialog-footer">
+        <PrimaryButton id="submit-button" onClick={onSubmit} text="Submit" disabled={!isChecked} />
       </DialogFooter>
     </Dialog>
   )

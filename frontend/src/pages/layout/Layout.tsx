@@ -78,9 +78,9 @@ const Layout = () => {
       <header className={styles.header} role={'banner'}>
         <Stack horizontal verticalAlign="center" horizontalAlign="space-between">
           <Stack horizontal verticalAlign="center">
-            <img src={logo} className={styles.headerIcon} aria-hidden="true" alt="" />
+            <img id="govuk-logo" src={logo} className={styles.headerIcon} aria-hidden="true" alt="" />
             <span className={styles.headerTitleContainer}>
-              <h1 className={styles.headerTitle}>{ui?.title}</h1>
+              <h1 id="header-title" className={styles.headerTitle}>{ui?.title}</h1>
             </span>
           </Stack>
           <Stack horizontal tokens={{ childrenGap: 4 }} className={styles.shareButtonContainer}>
@@ -96,7 +96,7 @@ const Layout = () => {
         </Stack>
       </header>
       <div className={styles.disclaimerBar}>
-        <span className={styles.disclaimerText}>
+        <span id="disclaimer-text" className={styles.disclaimerText}>
           DISCLAIMER: Remember that all answers are AI-generated, so do double check the answers' references to Insite,
           the People Team's documents on SharePoint, or with members of the People Team.
         </span>

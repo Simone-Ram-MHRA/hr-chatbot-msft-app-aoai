@@ -199,7 +199,6 @@ export const ChatHistoryListItemCell: React.FC<ChatHistoryListItemCellProps> = (
                     placeholder={item.title}
                     onChange={chatHistoryTitleOnChange}
                     onKeyDown={handleKeyPressEdit}
-                    // errorMessage={errorRename}
                     disabled={errorRename ? true : false}
                   />
                 </Stack.Item>
@@ -252,19 +251,19 @@ export const ChatHistoryListItemCell: React.FC<ChatHistoryListItemCellProps> = (
               onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ? handleSelectItem() : null)}>
               {truncatedTitle}
             </div>
-
             <Stack horizontal horizontalAlign="end">
               <IconButton
                 className={styles.itemButton}
                 iconProps={{ iconName: 'Delete' }}
+                id={`delete-button-${item.id}`}
                 title="Delete"
                 onClick={toggleDeleteDialog}
                 onKeyDown={e => (e.key === ' ' ? toggleDeleteDialog() : null)}
               />
-
               <IconButton
                 className={styles.itemButton}
                 iconProps={{ iconName: 'Edit' }}
+                id={`edit-button-${item.id}`}
                 title="Edit"
                 onClick={onEdit}
                 onKeyDown={e => (e.key === ' ' ? onEdit() : null)}
@@ -275,6 +274,7 @@ export const ChatHistoryListItemCell: React.FC<ChatHistoryListItemCellProps> = (
       )}
       {errorDelete && (
         <Text
+          id="error-delete-item"
           styles={{
             root: { color: 'red', marginTop: 5, fontSize: 14 }
           }}>
