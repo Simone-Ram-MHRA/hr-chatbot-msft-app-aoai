@@ -79,7 +79,7 @@ const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = ({ hidde
       <br />
       <Checkbox id="terms-checkbox" label="I agree to the terms and conditions" checked={isChecked} onChange={handleCheckboxChange} />
       <DialogFooter data-testid="dialog-footer">
-        <PrimaryButton onClick={onSubmit} text="Submit" disabled={!isChecked} />
+        <PrimaryButton id="submit-button" onClick={onSubmit} text="Submit" disabled={!isChecked} />
       </DialogFooter>
     </Dialog>
   )
