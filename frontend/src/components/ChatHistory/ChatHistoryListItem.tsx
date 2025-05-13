@@ -63,6 +63,7 @@ export const ChatHistoryListItemCell: React.FC<ChatHistoryListItemCellProps> = (
   const appStateContext = React.useContext(AppStateContext)
   const isSelected = item?.id === appStateContext?.state.currentChat?.id
   const dialogContentProps = {
+    id:'delete-dialog',
     type: DialogType.close,
     title: 'Are you sure you want to delete this item?',
     closeButtonAriaLabel: 'Close',
@@ -287,8 +288,8 @@ export const ChatHistoryListItemCell: React.FC<ChatHistoryListItemCellProps> = (
         dialogContentProps={dialogContentProps}
         modalProps={modalProps}>
         <DialogFooter>
-          <PrimaryButton onClick={onDelete} text="Delete" />
-          <DefaultButton onClick={toggleDeleteDialog} text="Cancel" />
+          <PrimaryButton id="dialog-delete-button" onClick={onDelete} text="Delete" />
+          <DefaultButton id="dialog-cancel-button" onClick={toggleDeleteDialog} text="Cancel" />
         </DialogFooter>
       </Dialog>
     </Stack>
