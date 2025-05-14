@@ -163,7 +163,7 @@ export const Answer = ({ answer, onCitationClicked, onExectResultClicked }: Prop
             defaultChecked={negativeFeedbackList.includes(Feedback.OtherUnhelpful)}
             onChange={updateFeedbackList}></Checkbox>
         </Stack>
-        <div onClick={() => setShowReportInappropriateFeedback(true)} style={{ color: '#115EA3', cursor: 'pointer' }}>
+        <div id="report-inappropriate-content" onClick={() => setShowReportInappropriateFeedback(true)} style={{ color: '#115EA3', cursor: 'pointer' }}>
           Report inappropriate content
         </div>
       </>
@@ -270,6 +270,7 @@ export const Answer = ({ answer, onCitationClicked, onExectResultClicked }: Prop
               {FEEDBACK_ENABLED && answer.message_id !== undefined && (
                 <Stack horizontal horizontalAlign="space-between">
                   <ThumbLike20Filled
+                    id={`like-response-${answer.message_id}`}
                     aria-hidden="false"
                     aria-label="Like this response"
                     onClick={() => onLikeResponseClicked()}
@@ -281,6 +282,7 @@ export const Answer = ({ answer, onCitationClicked, onExectResultClicked }: Prop
                     }
                   />
                   <ThumbDislike20Filled
+                    id={`dislike-response-${answer.message_id}`}
                     aria-hidden="false"
                     aria-label="Dislike this response"
                     onClick={() => onDislikeResponseClicked()}
@@ -415,7 +417,7 @@ export const Answer = ({ answer, onCitationClicked, onExectResultClicked }: Prop
 
           <div>By pressing submit, your feedback will be visible to the application owner.</div>
 
-          <DefaultButton disabled={negativeFeedbackList.length < 1} onClick={onSubmitNegativeFeedback}>
+          <DefaultButton id="submit-negative-feedback" disabled={negativeFeedbackList.length < 1} onClick={onSubmitNegativeFeedback}>
             Submit
           </DefaultButton>
         </Stack>
