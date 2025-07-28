@@ -739,19 +739,14 @@ const Chat = () => {
   }
 
   const parseCitationFromMessage = (message: ChatMessage) => {
-    console.log('parsing citations from message', message)
-
     if (message?.role && message?.role === 'tool' && typeof message?.content === 'string') {
       try {
-        console.log('parsedContent', JSON.parse(message?.content) || 'cannot parse content')
         const toolMessage = JSON.parse(message.content) as ToolMessageContent
         return toolMessage.citations
       } catch (error) {
-        console.log('catch error', error)
         return []
       }
     }
-    console.log('no citations found in message.')
     return []
   }
 

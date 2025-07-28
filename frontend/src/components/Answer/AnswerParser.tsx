@@ -9,7 +9,6 @@ export type ParsedAnswer = {
 } | null
 
 export const enumerateCitations = (citations: Citation[]) => {
-  console.log('enumerateCitations', citations)
   const filepathMap = new Map()
   for (const citation of citations) {
     const { filepath } = citation
@@ -26,12 +25,9 @@ export const enumerateCitations = (citations: Citation[]) => {
 
 export function parseAnswer(answer: AskResponse): ParsedAnswer {
   if (typeof answer.answer !== 'string') return null
-  console.log('answer:', answer)
   let answerText = answer.answer
   let docReference = ''
-  console.log('answerText', answerText)
   const citationLinks = answerText.match(/\[(doc\d\d?\d?)]/g)
-  console.log('citationsLinks', citationLinks)
   const lengthDocN = '[doc'.length
 
   let filteredCitations = [] as Citation[]
@@ -42,7 +38,6 @@ export function parseAnswer(answer: AskResponse): ParsedAnswer {
     // Replacing the links/citations with number
     const citationIndex = link.slice(lengthDocN, link.length - 1)
     const citation = cloneDeep(answer.citations[Number(citationIndex) - 1]) as Citation
-    console.log('citationClone', citation)
     if (citation && citation.filepath && !citationMap[citation.filepath]) {
       docReference += `[doc${citationIndex}] `
       citationMap[citation.filepath] = ++citationReindex
@@ -69,13 +64,10 @@ export function parseAnswer(answer: AskResponse): ParsedAnswer {
       })
     })
     .join('\n')
-  console.log('before filteredCitations', filteredCitations)
   // Sort citations by reindex_id to ensure numerical order
   filteredCitations.sort((a, b) => parseInt(a.reindex_id || '0') - parseInt(b.reindex_id || '0'))
-  console.log('after filteredCitations', filteredCitations)
   filteredCitations = enumerateCitations(filteredCitations)
 
-  console.log('final answer text', answerText)
   answerText += `\n display-none_${docReference}_display-none`
   return {
     citations: filteredCitations,
