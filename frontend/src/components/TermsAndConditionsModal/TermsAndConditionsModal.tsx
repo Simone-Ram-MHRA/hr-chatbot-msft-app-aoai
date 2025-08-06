@@ -27,14 +27,14 @@ const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = ({ hidde
   }
 
   const points = [
-    { text: 'I provide general People (previously known as HR) information and guidance.', iconName: 'CheckMark' },
-    { text: 'I don’t replace People professionals or give legal advice', iconName: 'Cancel' },
+    { text: 'I provide general innovative device information and guidance.', iconName: 'CheckMark' },
+    { text: 'I don\'t replace medical device professionals or give legal advice', iconName: 'Cancel' },
     {
       text: 'Your chats are confidential, but will be stored and analysed so please avoid sharing sensitive personal data.',
       iconName: 'Lock'
     },
     {
-      text: 'For complex or personal issues, please visit the A-Z on Sharepoint and/or contact your People team directly.',
+      text: 'For complex or technical issues, please visit the A-Z on Sharepoint and/or contact your innovative device team directly.',
       iconName: 'Phone'
     },
     {
@@ -57,7 +57,7 @@ const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = ({ hidde
       minWidth={600}>
       <div id="welcome-message">
         <Text>
-          Welcome to the MHRA People Chatbot!
+          Welcome to the Innovative Device Chatbot!
           <span>
             {' '}
             <Icon iconName={'Robot'} styles={{ root: { fontSize: 16, color: '#0078D4' } }} />
