@@ -98,7 +98,7 @@ const Layout = () => {
       <div className={styles.disclaimerBar}>
         <span id="disclaimer-text" className={styles.disclaimerText}>
           DISCLAIMER: Remember that all answers are AI-generated, so do double check the answers' references to Insite,
-          the Innovative Device Team's documents on SharePoint, or with members of the Innovative Device Team.
+          the Device Oriented Response Assistant (DORA) documents on SharePoint, or with members of the Device Oriented Response Assistant (DORA) team.
         </span>
       </div>
       <Outlet />

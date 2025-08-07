@@ -57,7 +57,7 @@ const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = ({ hidde
       minWidth={600}>
       <div id="welcome-message">
         <Text>
-          Welcome to the Innovative Device Chatbot!
+          Welcome to DORA - Device Oriented Response Assistant!
           <span>
             {' '}
             <Icon iconName={'Robot'} styles={{ root: { fontSize: 16, color: '#0078D4' } }} />
